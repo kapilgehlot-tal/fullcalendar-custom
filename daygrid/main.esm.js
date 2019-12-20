@@ -224,17 +224,17 @@ var SimpleDayGridEventRenderer = /** @class */ (function (_super) {
             computeEventEndResizable(context, eventDef, eventUi);
         var classes = this.getSegClasses(seg, isDraggable, isResizableFromStart || isResizableFromEnd, mirrorInfo);
         var skinCss = cssToStr(this.getSkinCss(eventUi));
-        var timeHtml = "";
-        var timeText;
+        // let timeHtml = "";
+        // let timeText;
         var titleHtml;
         classes.unshift("fc-day-grid-event", "fc-h-event");
         // Only display a timed events time if it is the starting segment
-        if (seg.isStart) {
-            timeText = this.getTimeText(eventRange);
-            if (timeText) {
-                timeHtml = '<span class="fc-time">' + htmlEscape(timeText) + "</span>";
-            }
-        }
+        // if (seg.isStart) {
+        //   timeText = this.getTimeText(eventRange);
+        //   if (timeText) {
+        //     timeHtml = '<span class="fc-time">' + htmlEscape(timeText) + "</span>";
+        //   }
+        // }
         titleHtml = eventDef.title || "&nbsp;"; // we always want one line of height
         return ('<a class="' +
             classes.join(" ") +
@@ -243,9 +243,10 @@ var SimpleDayGridEventRenderer = /** @class */ (function (_super) {
             (skinCss ? ' style="' + skinCss + '"' : "") +
             ">" +
             '<div class="fc-content">' +
-            (context.options.dir === "rtl"
-                ? titleHtml + " " + timeHtml // put a natural space in between
-                : timeHtml + " " + titleHtml) + //
+            // (context.options.dir === "rtl"
+            //   ? titleHtml + " " + timeHtml // put a natural space in between
+            //   : timeHtml + " " + titleHtml) + //
+            titleHtml +
             "</div>" +
             (isResizableFromStart
                 ? '<div class="fc-resizer fc-start-resizer"></div>'
