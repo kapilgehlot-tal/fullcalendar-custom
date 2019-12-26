@@ -1,0 +1,31 @@
+{
+  "name": "fullcalendar-custom/list",
+  "version": "4.3.0",
+  "title": "FullCalendar List View Plugin",
+  "description": "View your events as a bulleted list",
+  "keywords": [
+    "calendar",
+    "event",
+    "full-sized"
+  ],
+  "homepage": "https://fullcalendar.io/",
+  "docs": "https://fullcalendar.io/docs/list-view",
+  "bugs": "https://fullcalendar.io/reporting-bugs",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fullcalendar/fullcalendar.git",
+    "homepage": "https://github.com/fullcalendar/fullcalendar"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Kapil"
+  },
+  "copyright": "2019 Adam Shaw",
+  "peerDependencies": {
+    "fullcalendar-custom/core": "~4.3.0"
+  },
+  "main": "main.js",
+  "module": "main.esm.js",
+  "unpkg": "main.min.js",
+  "types": "main.d.ts"
+}
