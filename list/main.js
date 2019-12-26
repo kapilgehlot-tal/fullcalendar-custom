@@ -54,68 +54,68 @@ Docs & License: https://fullcalendar.io/
                 this.listView.renderSegList(segs);
             }
         };
-        ListEventRenderer.prototype.detachSegs = function () {
-        };
+        ListEventRenderer.prototype.detachSegs = function () { };
         // generates the HTML for a single event row
         ListEventRenderer.prototype.renderSegHtml = function (seg) {
-            var _a = this.context, theme = _a.theme, options = _a.options;
+            var theme = this.context.theme;
             var eventRange = seg.eventRange;
             var eventDef = eventRange.def;
-            var eventInstance = eventRange.instance;
+            //let eventInstance = eventRange.instance;
             var eventUi = eventRange.ui;
             var url = eventDef.url;
-            var classes = ['fc-list-item'].concat(eventUi.classNames);
-            var bgColor = eventUi.backgroundColor;
-            var timeHtml;
-            if (eventDef.allDay) {
-                timeHtml = core.getAllDayHtml(options);
-            }
-            else if (core.isMultiDayRange(eventRange.range)) {
-                if (seg.isStart) {
-                    timeHtml = core.htmlEscape(this._getTimeText(eventInstance.range.start, seg.end, false // allDay
-                    ));
-                }
-                else if (seg.isEnd) {
-                    timeHtml = core.htmlEscape(this._getTimeText(seg.start, eventInstance.range.end, false // allDay
-                    ));
-                }
-                else { // inner segment that lasts the whole day
-                    timeHtml = core.getAllDayHtml(options);
-                }
-            }
-            else {
-                // Display the normal time text for the *event's* times
-                timeHtml = core.htmlEscape(this.getTimeText(eventRange));
-            }
+            var classes = ["fc-list-item"].concat(eventUi.classNames);
+            //let bgColor = eventUi.backgroundColor;
+            //let timeHtml;
+            // if (eventDef.allDay) {
+            //   timeHtml = getAllDayHtml(options);
+            // } else if (isMultiDayRange(eventRange.range)) {
+            //   if (seg.isStart) {
+            //     timeHtml = htmlEscape(
+            //       this._getTimeText(
+            //         eventInstance.range.start,
+            //         seg.end,
+            //         false // allDay
+            //       )
+            //     );
+            //   } else if (seg.isEnd) {
+            //     timeHtml = htmlEscape(
+            //       this._getTimeText(
+            //         seg.start,
+            //         eventInstance.range.end,
+            //         false // allDay
+            //       )
+            //     );
+            //   } else {
+            //     // inner segment that lasts the whole day
+            //     timeHtml = getAllDayHtml(options);
+            //   }
+            // } else {
+            //   // Display the normal time text for the *event's* times
+            //   timeHtml = htmlEscape(this.getTimeText(eventRange));
+            // }
             if (url) {
-                classes.push('fc-has-url');
+                classes.push("fc-has-url");
             }
-            return '<tr class="' + classes.join(' ') + '">' +
-                (this.displayEventTime ?
-                    '<td class="fc-list-item-time ' + theme.getClass('widgetContent') + '">' +
-                        (timeHtml || '') +
-                        '</td>' :
-                    '') +
-                '<td class="fc-list-item-marker ' + theme.getClass('widgetContent') + '">' +
-                '<span class="fc-event-dot"' +
-                (bgColor ?
-                    ' style="background-color:' + bgColor + '"' :
-                    '') +
-                '></span>' +
-                '</td>' +
-                '<td class="fc-list-item-title ' + theme.getClass('widgetContent') + '">' +
-                '<a' + (url ? ' href="' + core.htmlEscape(url) + '"' : '') + '>' +
-                core.htmlEscape(eventDef.title || '') +
-                '</a>' +
-                '</td>' +
-                '</tr>';
+            return ('<tr class="' +
+                classes.join(" ") +
+                '">' +
+                '<td colspan="3" class="fc-list-item-title ' +
+                theme.getClass("widgetContent") +
+                '">' +
+                "<a" +
+                (url ? ' href="' + core.htmlEscape(url) + '"' : "") +
+                ">" +
+                (eventDef.title || "") +
+                "</a>" +
+                "</td>" +
+                "</tr>");
         };
         // like "4:00am"
         ListEventRenderer.prototype.computeEventTimeFormat = function () {
             return {
-                hour: 'numeric',
-                minute: '2-digit',
-                meridiem: 'short'
+                hour: "numeric",
+                minute: "2-digit",
+                meridiem: "short"
             };
         };
         return ListEventRenderer;
