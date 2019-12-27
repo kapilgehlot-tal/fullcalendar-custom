@@ -122,6 +122,7 @@ Docs & License: https://fullcalendar.io/
         return ListEventRenderer;
     }(core.FgEventRenderer));
 
+    var moment = require("moment");
     /*
     Responsible for the scroller, and forwarding event-related actions into the "grid".
     */
@@ -324,7 +325,11 @@ Docs & License: https://fullcalendar.io/
             //     "</td>"
             // ) as HTMLTableRowElement;
             return core.createElement("tr", {
-                className: dayIndex === 0 ? "fc-list-heading first-child" : "fc-list-heading",
+                className: "fc-list-heading",
+                id: "" + (dateEnv.formatIso(dayDate, { omitTime: true }) ===
+                    moment().format("YYYY-MM-DD")
+                    ? "scroll"
+                    : ""),
                 "data-date": dateEnv.formatIso(dayDate, { omitTime: true })
             }, '<td class="' +
                 (theme.getClass("tableListHeading") || theme.getClass("widgetHeader")) +
