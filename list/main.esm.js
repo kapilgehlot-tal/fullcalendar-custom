@@ -43,12 +43,13 @@ var ListEventRenderer = /** @class */ (function (_super) {
         return _this;
     }
     ListEventRenderer.prototype.attachSegs = function (segs) {
-        if (!segs.length) {
-            this.listView.renderEmptyMessage();
-        }
-        else {
-            this.listView.renderSegList(segs);
-        }
+        // if (!segs.length) {
+        //   this.listView.renderEmptyMessage();
+        // } else {
+        //   this.listView.renderSegList(segs);
+        // }
+        //Render for an empty event too
+        this.listView.renderSegList(segs);
     };
     ListEventRenderer.prototype.detachSegs = function () { };
     // generates the HTML for a single event row
@@ -127,7 +128,7 @@ var ListView = /** @class */ (function (_super) {
         _this.computeDateVars = memoize(computeDateVars);
         _this.eventStoreToSegs = memoize(_this._eventStoreToSegs);
         _this.renderSkeleton = memoizeRendering(_this._renderSkeleton, _this._unrenderSkeleton);
-        var eventRenderer = _this.eventRenderer = new ListEventRenderer(_this);
+        var eventRenderer = (_this.eventRenderer = new ListEventRenderer(_this));
         _this.renderContent = memoizeRendering(eventRenderer.renderSegs.bind(eventRenderer), eventRenderer.unrender.bind(eventRenderer), [_this.renderSkeleton]);
         return _this;
     }
@@ -152,16 +153,17 @@ var ListView = /** @class */ (function (_super) {
     };
     ListView.prototype._renderSkeleton = function (context) {
         var theme = context.theme;
-        this.el.classList.add('fc-list-view');
-        var listViewClassNames = (theme.getClass('listView') || '').split(' '); // wish we didn't have to do this
+        this.el.classList.add("fc-list-view");
+        var listViewClassNames = (theme.getClass("listView") || "").split(" "); // wish we didn't have to do this
         for (var _i = 0, listViewClassNames_1 = listViewClassNames; _i < listViewClassNames_1.length; _i++) {
             var listViewClassName = listViewClassNames_1[_i];
-            if (listViewClassName) { // in case input was empty string
+            if (listViewClassName) {
+                // in case input was empty string
                 this.el.classList.add(listViewClassName);
             }
         }
-        this.scroller = new ScrollComponent('hidden', // overflow x
-        'auto' // overflow y
+        this.scroller = new ScrollComponent("hidden", // overflow x
+        "auto" // overflow y
         );
         this.el.appendChild(this.scroller.el);
         this.contentEl = this.scroller.el; // shortcut
@@ -180,8 +182,7 @@ var ListView = /** @class */ (function (_super) {
         }
     };
     ListView.prototype.computeScrollerHeight = function (viewHeight) {
-        return viewHeight -
-            subtractInnerElHeight(this.el, this.scroller.el); // everything that's NOT the scroller
+        return viewHeight - subtractInnerElHeight(this.el, this.scroller.el); // everything that's NOT the scroller
     };
     ListView.prototype._eventStoreToSegs = function (eventStore, eventUiBases, dayRanges) {
         return this.eventRangesToSegs(sliceEventStore(eventStore, eventUiBases, this.props.dateProfile.activeRange, this.context.nextDayThreshold).fg, dayRanges);
@@ -210,14 +211,16 @@ var ListView = /** @class */ (function (_super) {
                     eventRange: eventRange,
                     start: segRange.start,
                     end: segRange.end,
-                    isStart: eventRange.isStart && segRange.start.valueOf() === range.start.valueOf(),
+                    isStart: eventRange.isStart &&
+                        segRange.start.valueOf() === range.start.valueOf(),
                     isEnd: eventRange.isEnd && segRange.end.valueOf() === range.end.valueOf(),
                     dayIndex: dayIndex
                 };
                 segs.push(seg);
                 // detect when range won't go fully into the next day,
                 // and mutate the latest seg to the be the end.
-                if (!seg.isEnd && !allDay &&
+                if (!seg.isEnd &&
+                    !allDay &&
                     dayIndex + 1 < dayRanges.length &&
                     range.end <
                         dateEnv.add(dayRanges[dayIndex + 1].start, nextDayThreshold)) {
@@ -235,9 +238,9 @@ var ListView = /** @class */ (function (_super) {
                 '<div class="fc-list-empty-wrap1">' +
                 '<div class="fc-list-empty">' +
                 htmlEscape(this.context.options.noEventsMessage) +
-                '</div>' +
-                '</div>' +
-                '</div>';
+                "</div>" +
+                "</div>" +
+                "</div>";
     };
     // called by ListEventRenderer
     ListView.prototype.renderSegList = function (allSegs) {
@@ -246,11 +249,14 @@ var ListView = /** @class */ (function (_super) {
         var dayIndex;
         var daySegs;
         var i;
-        var tableEl = htmlToElement('<table class="fc-list-table ' + theme.getClass('tableList') + '"><tbody></tbody></table>');
-        var tbodyEl = tableEl.querySelector('tbody');
+        var tableEl = htmlToElement('<table class="fc-list-table ' +
+            theme.getClass("tableList") +
+            '"><tbody></tbody></table>');
+        var tbodyEl = tableEl.querySelector("tbody");
         for (dayIndex = 0; dayIndex < segsByDay.length; dayIndex++) {
             daySegs = segsByDay[dayIndex];
-            if (daySegs) { // sparse array, so might be undefined
+            if (daySegs) {
+                // sparse array, so might be undefined
                 // append a day header
                 tbodyEl.appendChild(this.buildDayHeaderRow(this.dayDates[dayIndex]));
                 daySegs = this.eventRenderer.sortEventSegs(daySegs);
@@ -258,8 +264,11 @@ var ListView = /** @class */ (function (_super) {
                     tbodyEl.appendChild(daySegs[i].el); // append event row
                 }
             }
+            else {
+                tbodyEl.appendChild(this.buildDayHeaderRow(this.dayDates[dayIndex]));
+            }
         }
-        this.contentEl.innerHTML = '';
+        this.contentEl.innerHTML = "";
         this.contentEl.appendChild(tableEl);
     };
     // Returns a sparse array of arrays, segs grouped by their dayIndex
@@ -269,8 +278,10 @@ var ListView = /** @class */ (function (_super) {
         var seg;
         for (i = 0; i < segs.length; i++) {
             seg = segs[i];
-            (segsByDay[seg.dayIndex] || (segsByDay[seg.dayIndex] = []))
-                .push(seg);
+            (segsByDay[seg.dayIndex] || (segsByDay[seg.dayIndex] = [])).push(seg);
+        }
+        if (!segs.length) {
+            segsByDay = [null, null, null, null, null, null, null];
         }
         return segsByDay;
     };
@@ -279,24 +290,25 @@ var ListView = /** @class */ (function (_super) {
         var _a = this.context, theme = _a.theme, dateEnv = _a.dateEnv, options = _a.options;
         var mainFormat = createFormatter(options.listDayFormat); // TODO: cache
         var altFormat = createFormatter(options.listDayAltFormat); // TODO: cache
-        return createElement('tr', {
-            className: 'fc-list-heading',
-            'data-date': dateEnv.formatIso(dayDate, { omitTime: true })
-        }, '<td class="' + (theme.getClass('tableListHeading') ||
-            theme.getClass('widgetHeader')) + '" colspan="3">' +
-            (mainFormat ?
-                buildGotoAnchorHtml(options, dateEnv, dayDate, { 'class': 'fc-list-heading-main' }, htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
-                ) :
-                '') +
-            (altFormat ?
-                buildGotoAnchorHtml(options, dateEnv, dayDate, { 'class': 'fc-list-heading-alt' }, htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
-                ) :
-                '') +
-            '</td>');
+        return createElement("tr", {
+            className: "fc-list-heading",
+            "data-date": dateEnv.formatIso(dayDate, { omitTime: true })
+        }, '<td class="' +
+            (theme.getClass("tableListHeading") || theme.getClass("widgetHeader")) +
+            '" colspan="3">' +
+            (mainFormat
+                ? buildGotoAnchorHtml(options, dateEnv, dayDate, { class: "fc-list-heading-main" }, htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
+                )
+                : "") +
+            (altFormat
+                ? buildGotoAnchorHtml(options, dateEnv, dayDate, { class: "fc-list-heading-alt" }, htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
+                )
+                : "") +
+            "</td>");
     };
     return ListView;
 }(View));
-ListView.prototype.fgSegSelector = '.fc-list-item'; // which elements accept event actions
+ListView.prototype.fgSegSelector = ".fc-list-item"; // which elements accept event actions
 function computeDateVars(dateProfile) {
     var dayStart = startOfDay(dateProfile.renderRange.start);
     var viewEnd = dateProfile.renderRange.end;

@@ -10,7 +10,7 @@ declare module 'fullcalendar-custom/list' {
 }
 
 declare module 'fullcalendar-custom/list/ListView' {
-    import { View, ViewProps, ScrollComponent, DateMarker, DateRange, ComponentContext, EventUiHash, EventRenderRange, EventStore, Seg, ViewSpec } from 'fullcalendar-custom/core';
+    import { View, ViewProps, ScrollComponent, DateMarker, DateRange, ComponentContext, EventUiHash, EventRenderRange, EventStore, Seg, ViewSpec } from "fullcalendar-custom/core";
     export { ListView as default, ListView };
     class ListView extends View {
         scroller: ScrollComponent;
