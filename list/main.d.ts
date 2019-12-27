@@ -30,7 +30,7 @@ declare module 'fullcalendar-custom/list/ListView' {
         renderEmptyMessage(): void;
         renderSegList(allSegs: any): void;
         groupSegsByDay(segs: any): any[];
-        buildDayHeaderRow(dayDate: any): HTMLTableRowElement;
+        buildDayHeaderRow(dayDate: any, dayIndex: any): HTMLTableRowElement;
     }
 }
 

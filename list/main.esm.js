@@ -258,14 +258,14 @@ var ListView = /** @class */ (function (_super) {
             if (daySegs) {
                 // sparse array, so might be undefined
                 // append a day header
-                tbodyEl.appendChild(this.buildDayHeaderRow(this.dayDates[dayIndex]));
+                tbodyEl.appendChild(this.buildDayHeaderRow(this.dayDates[dayIndex], dayIndex));
                 daySegs = this.eventRenderer.sortEventSegs(daySegs);
                 for (i = 0; i < daySegs.length; i++) {
                     tbodyEl.appendChild(daySegs[i].el); // append event row
                 }
             }
             else {
-                tbodyEl.appendChild(this.buildDayHeaderRow(this.dayDates[dayIndex]));
+                tbodyEl.appendChild(this.buildDayHeaderRow(this.dayDates[dayIndex], dayIndex));
             }
         }
         this.contentEl.innerHTML = "";
@@ -286,16 +286,45 @@ var ListView = /** @class */ (function (_super) {
         return segsByDay;
     };
     // generates the HTML for the day headers that live amongst the event rows
-    ListView.prototype.buildDayHeaderRow = function (dayDate) {
+    ListView.prototype.buildDayHeaderRow = function (dayDate, dayIndex) {
         var _a = this.context, theme = _a.theme, dateEnv = _a.dateEnv, options = _a.options;
         var mainFormat = createFormatter(options.listDayFormat); // TODO: cache
         var altFormat = createFormatter(options.listDayAltFormat); // TODO: cache
+        // return createElement(
+        //   "tr",
+        //   {
+        //     className: "fc-list-heading",
+        //     "data-date": dateEnv.formatIso(dayDate, { omitTime: true })
+        //   },
+        //   '<td class="' +
+        //     (theme.getClass("tableListHeading") || theme.getClass("widgetHeader")) +
+        //     '" colspan="3">' +
+        //     (mainFormat
+        //       ? buildGotoAnchorHtml(
+        //           options,
+        //           dateEnv,
+        //           dayDate,
+        //           { class: "fc-list-heading-main" },
+        //           htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
+        //         )
+        //       : "") +
+        //     (altFormat
+        //       ? buildGotoAnchorHtml(
+        //           options,
+        //           dateEnv,
+        //           dayDate,
+        //           { class: "fc-list-heading-alt" },
+        //           htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
+        //         )
+        //       : "") +
+        //     "</td>"
+        // ) as HTMLTableRowElement;
         return createElement("tr", {
-            className: "fc-list-heading",
+            className: dayIndex === 0 ? "fc-list-heading first-child" : "fc-list-heading",
             "data-date": dateEnv.formatIso(dayDate, { omitTime: true })
         }, '<td class="' +
             (theme.getClass("tableListHeading") || theme.getClass("widgetHeader")) +
-            '" colspan="3">' +
+            '" colspan="3"><div class="fc-widget-innerheader">' +
             (mainFormat
                 ? buildGotoAnchorHtml(options, dateEnv, dayDate, { class: "fc-list-heading-main" }, htmlEscape(dateEnv.format(dayDate, mainFormat)) // inner HTML
                 )
@@ -304,7 +333,7 @@ var ListView = /** @class */ (function (_super) {
                 ? buildGotoAnchorHtml(options, dateEnv, dayDate, { class: "fc-list-heading-alt" }, htmlEscape(dateEnv.format(dayDate, altFormat)) // inner HTML
                 )
                 : "") +
-            "</td>");
+            "</div></td>");
     };
     return ListView;
 }(View));
