@@ -281,6 +281,9 @@ var ListView = /** @class */ (function (_super) {
             seg = segs[i];
             (segsByDay[seg.dayIndex] || (segsByDay[seg.dayIndex] = [])).push(seg);
         }
+        while (segsByDay.length < 7) {
+            segsByDay.push(null);
+        }
         if (!segs.length) {
             segsByDay = [null, null, null, null, null, null, null];
         }
@@ -321,7 +324,7 @@ var ListView = /** @class */ (function (_super) {
         //     "</td>"
         // ) as HTMLTableRowElement;
         return createElement("tr", {
-            className: "fc-list-heading",
+            className: dayIndex === 0 ? "fc-list-heading first-child" : "fc-list-heading",
             id: "" + (dateEnv.formatIso(dayDate, { omitTime: true }) ===
                 moment().format("YYYY-MM-DD")
                 ? "scroll"
